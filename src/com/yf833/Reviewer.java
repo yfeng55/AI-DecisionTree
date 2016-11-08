@@ -26,4 +26,13 @@ public class Reviewer {
     }
 
 
+    // compute P(R=T)
+    public float getRt(float S){
+        return this.Rt_St*S + this.Rt_Sf*(1-S);
+    }
+    // compute P(R=F)
+    public float getRf(float S){
+        return 1 - (this.Rt_St*S + this.Rt_Sf*(1-S));
+    }
+
 }

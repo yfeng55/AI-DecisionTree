@@ -76,11 +76,11 @@ public class Main {
             HashSet<Reviewer> new_reviewerset = new HashSet<>(reviewer_set);
             new_reviewerset.remove(r);
 
-            Node child1 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", true));
+            Node child1 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", true, r.getRt(S)));
             current.children.add(child1);
             current.children.add(new Node("publish", "publish", true));
 
-            Node child2 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", false));
+            Node child2 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", false, r.getRf(S)));
             current.children.add(child2);
             current.children.add(new Node("reject", "reject", true));
         }
@@ -91,6 +91,7 @@ public class Main {
 
 
     ///// HELPER FUNCTIONS /////
+
     public static void printTree(Node root){
 
         System.out.println(root.toString());
