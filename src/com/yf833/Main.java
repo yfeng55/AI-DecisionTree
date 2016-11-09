@@ -25,8 +25,6 @@ public class Main {
         Node root = buildTree();
 
 
-        System.out.println(Util.a_b(0.6, 0.2, 0.36));
-
         printTree(root);
 
     }
@@ -85,13 +83,13 @@ public class Main {
 
             ArrayList<Reviewer> reviewers1 = new ArrayList<>(current.reviewers_used);
             reviewers1.add(r);
-            Node child1 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", true, r.getRt(S), reviewers1) );
+            Node child1 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", true, r.Rt, reviewers1) );
             current.children.add(child1);
             current.children.add(new Node("publish", "publish", true));
 
             ArrayList<Reviewer> reviewers2 = new ArrayList<>(current.reviewers_used);
             reviewers2.add(r);
-            Node child2 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", false, r.getRf(S), reviewers2) );
+            Node child2 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", false, r.Rf, reviewers2) );
             current.children.add(child2);
             current.children.add(new Node("reject", "reject", true));
         }
@@ -138,7 +136,7 @@ public class Main {
             double Rt_St = Double.parseDouble(reviewerline[1]);
             double Rt_Sf = Double.parseDouble(reviewerline[2]);
 
-            Reviewer reviewer = new Reviewer(i, cost, Rt_St, Rt_Sf);
+            Reviewer reviewer = new Reviewer(i, cost, Rt_St, Rt_Sf, S);
             reviewers[i] = reviewer;
             i++;
         }
