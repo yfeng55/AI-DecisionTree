@@ -5,11 +5,11 @@ public class Reviewer {
 
     public int id;
     public int cost;
-    public float Rt_St; // P(R=T|S=T)
-    public float Rt_Sf; // P(R=T|S=F)
+    public double Rt_St; // P(R=T|S=T)
+    public double Rt_Sf; // P(R=T|S=F)
 
 
-    public Reviewer(int id, int cost, float Rt_St, float Rt_Sf){
+    public Reviewer(int id, int cost, double Rt_St, double Rt_Sf){
         this.id = id;
         this.cost = cost;
         this.Rt_St = Rt_St;
@@ -27,11 +27,11 @@ public class Reviewer {
 
 
     // compute P(R=T)
-    public float getRt(float S){
+    public double getRt(double S){
         return this.Rt_St*S + this.Rt_Sf*(1-S);
     }
     // compute P(R=F)
-    public float getRf(float S){
+    public double getRf(double S){
         return 1 - (this.Rt_St*S + this.Rt_Sf*(1-S));
     }
 

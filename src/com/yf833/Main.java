@@ -2,6 +2,7 @@ package com.yf833;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -12,8 +13,8 @@ public class Main {
     public static int num_reviewers;
     public static int success_amount;
     public static int failure_amount;
-    public static float S;
-    public static float F;
+    public static double S;
+    public static double F;
     public static Reviewer[] reviewers;
 
 
@@ -22,6 +23,9 @@ public class Main {
         getInput(args[0]);
 
         Node root = buildTree();
+
+
+        System.out.println(Util.a_b(0.6, 0.2, 0.36));
 
         printTree(root);
 
@@ -73,14 +77,21 @@ public class Main {
 
         //recursive case:
         for(Reviewer r : reviewer_set){
+
+            //create a new reviewerset where the current reviewer is removed
             HashSet<Reviewer> new_reviewerset = new HashSet<>(reviewer_set);
             new_reviewerset.remove(r);
 
-            Node child1 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", true, r.getRt(S)));
+
+            ArrayList<Reviewer> reviewers1 = new ArrayList<>(current.reviewers_used);
+            reviewers1.add(r);
+            Node child1 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", true, r.getRt(S), reviewers1) );
             current.children.add(child1);
             current.children.add(new Node("publish", "publish", true));
 
-            Node child2 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", false, r.getRf(S)));
+            ArrayList<Reviewer> reviewers2 = new ArrayList<>(current.reviewers_used);
+            reviewers2.add(r);
+            Node child2 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", false, r.getRf(S), reviewers2) );
             current.children.add(child2);
             current.children.add(new Node("reject", "reject", true));
         }
@@ -113,7 +124,7 @@ public class Main {
         num_reviewers = Integer.parseInt(firstline[0]);
         success_amount = Integer.parseInt(firstline[1]);
         failure_amount = Integer.parseInt(firstline[2]);
-        S = Float.parseFloat(firstline[3]);
+        S = Double.parseDouble(firstline[3]);
         F = 1 - S;
 
         reviewers = new Reviewer[num_reviewers];
@@ -124,8 +135,8 @@ public class Main {
             String[] reviewerline = s.nextLine().split(" +");
 
             int cost = Integer.parseInt(reviewerline[0]);
-            float Rt_St = Float.parseFloat(reviewerline[1]);
-            float Rt_Sf = Float.parseFloat(reviewerline[2]);
+            double Rt_St = Double.parseDouble(reviewerline[1]);
+            double Rt_Sf = Double.parseDouble(reviewerline[2]);
 
             Reviewer reviewer = new Reviewer(i, cost, Rt_St, Rt_Sf);
             reviewers[i] = reviewer;
