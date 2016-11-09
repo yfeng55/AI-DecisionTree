@@ -11,35 +11,34 @@ public class Util {
         double numerator=1;
         double denominator=1;
 
+        //compute the numerator: P(R1|S) * P(R2|S) * .. P(Rn|S) * P(S)
         if(sf == 'S'){
-            //compute the numerator: P(R1|S) * P(R2|S) * .. P(Rn|S) * P(S)
             numerator = S;
-            Reviewer firstreviewer = reviewers.get(0);
-
             for(Reviewer r : reviewers){
                 if(r.review == true){
                     numerator *= r.Rt_St;
-                    denominator = firstreviewer.Rt * R_Rprev;
                 }else{
                     numerator *= 1 - r.Rt_St;
-                    denominator = firstreviewer.Rf * R_Rprev;
                 }
             }
         }
         else{
-            //compute the numerator: P(R1|S) * P(R2|S) * .. P(Rn|S) * P(S)
             numerator = 1-S;
-            Reviewer firstreviewer = reviewers.get(0);
-
             for(Reviewer r : reviewers){
                 if(r.review == true){
                     numerator *= r.Rt_Sf;
-                    denominator = firstreviewer.Rt * R_Rprev;
                 }else{
                     numerator *= 1 - r.Rt_Sf;
-                    denominator = firstreviewer.Rf * R_Rprev;
                 }
             }
+        }
+
+        //compute the denominator
+        Reviewer firstreviewer = reviewers.get(0);
+        if(firstreviewer.review == true){
+            denominator = firstreviewer.Rt * R_Rprev;
+        }else{
+            denominator = firstreviewer.Rf * R_Rprev;
         }
 
         return numerator / denominator;

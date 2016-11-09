@@ -33,10 +33,10 @@ public class Main {
 
         ArrayList<Reviewer> arr = new ArrayList<>();
         arr.add(r1);
-//        arr.add(r2);
+        arr.add(r2);
 
-//        System.out.println(Util.S_R(arr, 0.46, S, 'S'));
-        System.out.println(Util.R_R(arr, r2, 1.0, S));
+        System.out.println(Util.S_R(arr, 0.54, S, 'S'));
+//        System.out.println(Util.R_R(arr, r1, 1.0, S));
 
     }
 
