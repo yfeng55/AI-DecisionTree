@@ -9,6 +9,7 @@ public class Reviewer {
     public double Rt_Sf; // P(R=T|S=F)
     public double Rt;
     public double Rf;
+    public boolean review;
 
 
     public Reviewer(int id, int cost, double Rt_St, double Rt_Sf, double S){

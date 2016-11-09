@@ -1,9 +1,67 @@
 package com.yf833;
 
-
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Util {
+
+    // given a list of reviewers and their previous recommendations (true/false)
+    // return the conditional probability that the book will succeed: P(S|R1,..Rn)
+    public static double S_R(ArrayList<Reviewer> reviewers, double R_Rprev, double S, char sf){
+
+        double numerator=1;
+        double denominator=1;
+
+        if(sf == 'S'){
+            //compute the numerator: P(R1|S) * P(R2|S) * .. P(Rn|S) * P(S)
+            numerator = S;
+            Reviewer firstreviewer = reviewers.get(0);
+
+            for(Reviewer r : reviewers){
+                if(r.review == true){
+                    numerator *= r.Rt_St;
+                    denominator = firstreviewer.Rt * R_Rprev;
+                }else{
+                    numerator *= 1 - r.Rt_St;
+                    denominator = firstreviewer.Rf * R_Rprev;
+                }
+            }
+        }
+        else{
+            //compute the numerator: P(R1|S) * P(R2|S) * .. P(Rn|S) * P(S)
+            numerator = 1-S;
+            Reviewer firstreviewer = reviewers.get(0);
+
+            for(Reviewer r : reviewers){
+                if(r.review == true){
+                    numerator *= r.Rt_Sf;
+                    denominator = firstreviewer.Rt * R_Rprev;
+                }else{
+                    numerator *= 1 - r.Rt_Sf;
+                    denominator = firstreviewer.Rf * R_Rprev;
+                }
+            }
+        }
+
+        return numerator / denominator;
+    }
+
+
+
+    // given a list of reviewers and their previous reommendations (true/false)
+    // return the conditional probability that a reviewer recommends true/false: P(Rn|R1,..Rn-1)
+    public static double R_R(ArrayList<Reviewer> prevreviews, Reviewer currentreviewer, double R_Rprev, double S){
+
+        // get the P(Rn|S,R1,..Rn-1) and P(Rn|F,R1,..Rn-1) probabilities
+        double R_SandRi = currentreviewer.Rt_St;
+        double R_FandRi = currentreviewer.Rt_Sf;
+
+        // compute P(S|R1,R2,..Rn) and P(F|R1,R2,..Rn)
+        double S_Ri = S_R(prevreviews, R_Rprev, S, 'S');
+        double F_Ri = S_R(prevreviews, R_Rprev, S, 'F');
+
+        return R_SandRi*S_Ri + R_FandRi*F_Ri;
+    }
+
 
     // given P(A), P(B), P(B|A), return P(A|B)
     public static double a_b(double A, double B, double B_A){
@@ -11,31 +69,7 @@ public class Util {
     }
 
 
-    // given a hashmap of reviewers and their previous reommendations (true/false)
-    // return the conditional probability that a reviewer recommends true/false
-    public static double R_R(HashMap<Reviewer, Boolean> prevreviews, Reviewer currentreviewer, double S){
-
-        double F = 1 - S;
-        double result = 0.0;
-
-
-        //iterate through all reviewers in the HashMap
-        for(Reviewer prevreviewer : prevreviews.keySet()){
-
-            //compute P(R | S,Ri) for each past reviewer and multiply it by P(S | Ri)
-            double R_SandRi = prevreviewer.Rt_St;
-            double S_Ri = a_b(S, prevreviewer.Rt, prevreviewer.Rt_St);
-
-            //compute P(R | F,Ri) for each past reviewer and multiply it by P(F | Ri)
-            double R_FandRi = prevreviewer.Rt_Sf;
-            double F_Ri = a_b(F, prevreviewer.Rt, prevreviewer.Rt_Sf);
-
-            result += (R_SandRi * S_Ri + R_FandRi * F_Ri);
-        }
-
-
-        return result;
-    }
-
-
 }
+
+
+

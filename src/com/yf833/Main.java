@@ -22,10 +22,21 @@ public class Main {
 
         getInput(args[0]);
 
-        Node root = buildTree();
+//        Node root = buildTree();
+//        printTree(root);
 
 
-        printTree(root);
+        Reviewer r1 = new Reviewer(1, 400, 0.9, 0.2, 0.2);
+        Reviewer r2 = new Reviewer(2, 100, 0.6, 0.3, 0.2);
+        r1.review = false;
+        r2.review = true;
+
+        ArrayList<Reviewer> arr = new ArrayList<>();
+        arr.add(r1);
+//        arr.add(r2);
+
+//        System.out.println(Util.S_R(arr, 0.46, S, 'S'));
+        System.out.println(Util.R_R(arr, r2, 1.0, S));
 
     }
 
@@ -128,7 +139,7 @@ public class Main {
         reviewers = new Reviewer[num_reviewers];
 
         //add reviewers to the reviewers list
-        int i=0;
+        int i=1;
         while(s.hasNextLine()){
             String[] reviewerline = s.nextLine().split(" +");
 
@@ -137,7 +148,7 @@ public class Main {
             double Rt_Sf = Double.parseDouble(reviewerline[2]);
 
             Reviewer reviewer = new Reviewer(i, cost, Rt_St, Rt_Sf, S);
-            reviewers[i] = reviewer;
+            reviewers[i-1] = reviewer;
             i++;
         }
 
