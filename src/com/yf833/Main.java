@@ -28,15 +28,15 @@ public class Main {
 
         Reviewer r1 = new Reviewer(1, 400, 0.9, 0.2, 0.2);
         Reviewer r2 = new Reviewer(2, 100, 0.6, 0.3, 0.2);
-        r1.review = false;
+        r1.review = true;
         r2.review = true;
 
         ArrayList<Reviewer> arr = new ArrayList<>();
-        arr.add(r1);
         arr.add(r2);
+//        arr.add(r1);
 
-        System.out.println(Util.S_R(arr, 0.54, S, 'S'));
-//        System.out.println(Util.R_R(arr, r1, 1.0, S));
+//        System.out.println(Util.S_R(arr, 0.29, S, 'S'));
+        System.out.println(Util.R_R(arr, r1, 1.0, S));
 
     }
 
