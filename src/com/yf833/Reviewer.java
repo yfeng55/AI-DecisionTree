@@ -31,7 +31,9 @@ public class Reviewer {
 
         this.Rt = oldreviewer.Rt;
         this.Rf = oldreviewer.Rf;
+        this.review = oldreviewer.review;
     }
+
     public Reviewer(Reviewer oldreviewer, boolean review){
         this.id = oldreviewer.id;
         this.cost = oldreviewer.cost;
@@ -47,9 +49,10 @@ public class Reviewer {
 
     public String toString(){
         String output = "";
-        output += "cost: $" + this.cost + "\t";
-        output += "P(R=T|S=T): " + this.Rt_St + "\t";
-        output += "P(R=T|S=F): " + this.Rt_Sf + "\t";
+        output += "R" + this.id + ": " + this.review;
+//        output += "cost: $" + this.cost + "\t";
+//        output += "P(R=T|S=T): " + this.Rt_St + "\t";
+//        output += "P(R=T|S=F): " + this.Rt_Sf + "\t";
         return output;
     }
 

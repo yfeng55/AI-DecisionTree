@@ -11,6 +11,7 @@ public class Node {
     public ArrayList<Reviewer> reviewers_used;
     public double probability;
 
+    public String visited;
 
 
     public Node(String decisionstate, String type, double probability){
@@ -20,6 +21,8 @@ public class Node {
 
         this.children = new ArrayList<>();
         this.reviewers_used = new ArrayList<>();
+
+        this.visited = "unseen";
     }
 
     public Node(String decisionstate, String type, double probability, ArrayList<Reviewer> reviewers_used){
@@ -29,6 +32,8 @@ public class Node {
 
         this.children = new ArrayList<>();
         this.reviewers_used = reviewers_used;
+
+        this.visited = "unseen";
     }
 
 

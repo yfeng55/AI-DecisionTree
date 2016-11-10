@@ -22,9 +22,11 @@ public class Main {
         getInput(args[0]);
 
         Node root = buildTree();
-        printTree(root);
+//        printTree(root);
 
+        maxExpectedValue(root);
 
+//        EXAMPLE:
 //        Reviewer r1 = new Reviewer(1, 400, 0.9, 0.2, 0.2);
 //        Reviewer r2 = new Reviewer(2, 100, 0.6, 0.3, 0.2);
 //        r1.review = true;
@@ -36,6 +38,42 @@ public class Main {
 
     }
 
+
+
+    public static double maxExpectedValue(Node root){
+
+        root.visited = "seen";
+        double overallmax = 0.0;
+
+
+        //base case (success/fail node):
+        if(root.children.isEmpty() && root.type.equals("publish")){
+            double success_probability = 0.0;
+            if(!root.reviewers_used.isEmpty()){
+                success_probability = Util.S_R(root.reviewers_used, root.probability, S, 'S');
+            }
+            System.out.println(success_probability);
+        }
+
+        for(Node n : root.children){
+
+            double localmax = 0.0;
+
+            if(n.visited.equals("unseen")){
+                localmax = maxExpectedValue(n);
+            }
+
+            if(localmax > overallmax){
+                overallmax = localmax;
+            }
+        }
+
+        root.visited = "finished";
+
+        return overallmax;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static Node buildTree(){
 
@@ -57,14 +95,14 @@ public class Main {
             newreviewersleft.remove(i);
 
             //create a new decision node for each reviewer
-            Node newnode1 = new Node("Consult R" + reviewersleft.get(i).id, "consult", reviewersleft.get(i).Rt);
+            Node newnode1 = new Node("Consult R" + reviewersleft.get(i).id + ": True", "consult", reviewersleft.get(i).Rt);
             newnode1.reviewers_used.add(new Reviewer(reviewersleft.get(i), true) );
 
             Node yeschild = buildSubtree(newreviewersleft, newnode1, 1.0);
             root.children.add(yeschild);
 
             //create a new decision node for each reviewer
-            Node newnode2 = new Node("Consult R" + reviewersleft.get(i).id, "consult", reviewersleft.get(i).Rf);
+            Node newnode2 = new Node("Consult R" + reviewersleft.get(i).id + ": False", "consult", reviewersleft.get(i).Rf);
             newnode2.reviewers_used.add(new Reviewer(reviewersleft.get(i), false) );
 
             Node nochild = buildSubtree(newreviewersleft, newnode2, 1.0);
@@ -80,11 +118,11 @@ public class Main {
         //base cases:
         //if no more nodes to add
         if(reviewersleft.isEmpty() && current.reviewers_used.get(current.reviewers_used.size()-1).review == false){
-            current.children.add(new Node("reject", "reject", 1.0));
+            current.children.add(new Node("reject", "reject", 1-current.probability, copyReviewers(current.reviewers_used)));
             return current;
         }
         else if(reviewersleft.isEmpty() && current.reviewers_used.get(current.reviewers_used.size()-1).review == true){
-            current.children.add(new Node("publish", "publish", 1.0));
+            current.children.add(new Node("publish", "publish", current.probability, copyReviewers(current.reviewers_used)));
             return current;
         }
         //if node is an end node (publish or reject)
@@ -106,19 +144,21 @@ public class Main {
             //add a R=T node
             ArrayList<Reviewer> reviewers1 = copyReviewers(current.reviewers_used);
             reviewers1.add(new Reviewer(reviewersleft.get(i), true));
-            Node child1 = buildSubtree(new_reviewersleft, new Node("Consult R" + reviewersleft.get(i).id, "consult", r_probability, reviewers1), r_probability);
+            Node child1 = buildSubtree(new_reviewersleft, new Node("Consult R" + reviewersleft.get(i).id + ": True", "consult", r_probability, reviewers1), r_probability);
             current.children.add(child1);
 
             //add a R=F node
             ArrayList<Reviewer> reviewers2 = new ArrayList<>(current.reviewers_used);
             reviewers2.add(new Reviewer(reviewersleft.get(i), false));
-            Node child2 = buildSubtree(new_reviewersleft, new Node("Consult R" + reviewersleft.get(i).id, "consult", 1-r_probability, reviewers2), 1-r_probability);
+            Node child2 = buildSubtree(new_reviewersleft, new Node("Consult R" + reviewersleft.get(i).id + ": False", "consult", 1-r_probability, reviewers2), 1-r_probability);
             current.children.add(child2);
 
+
+
             if(current.reviewers_used.get(current.reviewers_used.size()-1).review == false){
-                current.children.add(new Node("reject", "reject", 1.0));
+                current.children.add(new Node("reject", "reject", 1-current.probability, copyReviewers(current.reviewers_used)));
             }else{
-                current.children.add(new Node("publish", "publish", 1.0));
+                current.children.add(new Node("publish", "publish", current.probability, copyReviewers(current.reviewers_used)));
             }
 
 

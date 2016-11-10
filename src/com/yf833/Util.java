@@ -38,7 +38,7 @@ public class Util {
         if(firstreviewer.review == true){
             denominator = firstreviewer.Rt * R_Rprev;
         }else{
-            denominator = firstreviewer.Rf * R_Rprev;
+            denominator = firstreviewer.Rf * (1-R_Rprev);
         }
 
         return numerator / denominator;
