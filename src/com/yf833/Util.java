@@ -72,6 +72,12 @@ public class Util {
         return (B_A * A)/B;
     }
 
+    // return the expected value of 2 values and their corresponding probabilities
+    public static double expectedVal(double a_prob, double a_val, double b_prob, double b_val){
+        return (a_prob * a_val) + (b_prob * b_val);
+    }
+
+
 
 }
 
