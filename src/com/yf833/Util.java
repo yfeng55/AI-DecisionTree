@@ -73,10 +73,25 @@ public class Util {
     }
 
     // return the expected value of 2 values and their corresponding probabilities
-    public static double expectedVal(double a_prob, double a_val, double b_prob, double b_val){
+    public static double expectedVal(double a_prob, double a_val, double b_prob, double b_val, ArrayList<Reviewer> reviewersused){
+
+        for(Reviewer r : reviewersused){
+            a_val -= r.cost;
+            b_val -= r.cost;
+        }
+
         return (a_prob * a_val) + (b_prob * b_val);
     }
 
+    // cost to reject
+    public static double rejectCost(ArrayList<Reviewer> reviewersused){
+        double cost = 0;
+        for(Reviewer r : reviewersused){
+            cost -= r.cost;
+        }
+
+        return cost;
+    }
 
 
 }

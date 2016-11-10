@@ -24,7 +24,8 @@ public class Main {
         Node root = buildTree();
 //        printTree(root);
 
-        maxExpectedValue(root);
+        System.out.println();
+        System.out.println(maxExpectedValue(root));
 
 //        EXAMPLE:
 //        Reviewer r1 = new Reviewer(1, 400, 0.9, 0.2, 0.2);
@@ -46,13 +47,22 @@ public class Main {
         double overallmax = 0.0;
 
 
-        //base case (success/fail node):
+        //base case (publish/reject node):
         if(root.children.isEmpty() && root.type.equals("publish")){
             double success_probability = S;
             if(!root.reviewers_used.isEmpty()){
                 success_probability = Util.S_R(root.reviewers_used, root.probability, S, 'S');
             }
             System.out.println(success_probability);
+
+            //compute expected value
+            double expectedval =  Util.expectedVal(success_probability, success_amount, (1-success_probability), failure_amount, root.reviewers_used);
+            System.out.println(expectedval + "\n");
+            return expectedval;
+        }
+        else if(root.children.isEmpty() && root.type.equals("reject")){
+            System.out.println("reject cost:" + Util.rejectCost(root.reviewers_used) + "\n");
+            return Util.rejectCost(root.reviewers_used);
         }
 
         for(Node n : root.children){
