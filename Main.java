@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.*;
 
 
 
@@ -15,7 +16,7 @@ public class Main {
     public static Reviewer[] reviewers;
 
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
 
         getInput(args[0]);
 
@@ -46,9 +47,23 @@ public class Main {
         }
 
         System.out.println("Expected value: " + overallmax);
-        System.out.println(advicestring + ": ");
+        System.out.print(advicestring + ": ");
 
 
+        //get user's input
+        BufferedReader userinput= new BufferedReader(new InputStreamReader(System.in));
+        
+        String response;
+        response = userinput.readLine();
+        while (!(response.equals("Yes") || response.equals("No")) ){
+            response = userinput.readLine();
+        }
+
+        if(overallmax > 0.0 && response.equals("Yes")){
+            System.out.println("Publish");
+        }else{
+            System.out.println("Reject");
+        }
     }
 
 
