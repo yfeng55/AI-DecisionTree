@@ -98,14 +98,14 @@ public class Main {
             Node newnode1 = new Node("Consult R" + reviewersleft.get(i).id + ": True", "consult", reviewersleft.get(i).Rt);
             newnode1.reviewers_used.add(new Reviewer(reviewersleft.get(i), true) );
 
-            Node yeschild = buildSubtree(newreviewersleft, newnode1, 1.0);
+            Node yeschild = buildSubtree(newreviewersleft, newnode1, reviewersleft.get(i).Rt);
             root.children.add(yeschild);
 
             //create a new decision node for each reviewer
             Node newnode2 = new Node("Consult R" + reviewersleft.get(i).id + ": False", "consult", reviewersleft.get(i).Rf);
             newnode2.reviewers_used.add(new Reviewer(reviewersleft.get(i), false) );
 
-            Node nochild = buildSubtree(newreviewersleft, newnode2, 1.0);
+            Node nochild = buildSubtree(newreviewersleft, newnode2, reviewersleft.get(i).Rt);
             root.children.add(nochild);
         }
 
