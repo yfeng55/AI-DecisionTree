@@ -25,7 +25,11 @@ public class Main {
 //        printTree(root);
 
         System.out.println();
-        System.out.println(maxExpectedValue(root));
+
+        for(Node choice : root.children){
+            System.out.println("max: " + maxExpectedValue(choice) + "\n------------------------");
+        }
+
 
 //        EXAMPLE:
 //        Reviewer r1 = new Reviewer(1, 400, 0.9, 0.2, 0.2);
@@ -43,9 +47,9 @@ public class Main {
 
     public static double maxExpectedValue(Node root){
 
-        root.visited = "seen";
-        double overallmax = 0.0;
+        double returnval = 0.0;
 
+        root.visited = "seen";
 
         //base case (publish/reject node):
         if(root.children.isEmpty() && root.type.equals("publish")){
@@ -65,22 +69,20 @@ public class Main {
             return Util.rejectCost(root.reviewers_used);
         }
 
+
+        ArrayList<Double> expectedvals = new ArrayList<>();
+        ArrayList<String> types = new ArrayList<>();
+
         for(Node n : root.children){
 
-            double localmax = 0.0;
-
             if(n.visited.equals("unseen")){
-                localmax = maxExpectedValue(n);
-            }
-
-            if(localmax > overallmax){
-                overallmax = localmax;
+                double expectedval = maxExpectedValue(n);
             }
         }
 
-        root.visited = "finished";
 
-        return overallmax;
+        root.visited = "finished";
+        return returnval;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
