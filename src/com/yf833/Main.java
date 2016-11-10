@@ -26,24 +26,38 @@ public class Main {
 
         System.out.println();
 
+        double overallmax = 0.0;
+        Node suggestedchoice = null;
         for(Node choice : root.children){
-            System.out.println("max: " + maxExpectedValue(choice) + "\n------------------------");
+
+            double localmax = maxExpectedValue(choice);
+
+            if(localmax > overallmax){
+                overallmax = localmax;
+                suggestedchoice = choice;
+            }
         }
 
 
-//        EXAMPLE:
-//        Reviewer r1 = new Reviewer(1, 400, 0.9, 0.2, 0.2);
-//        Reviewer r2 = new Reviewer(2, 100, 0.6, 0.3, 0.2);
-//        r1.review = true;
-//        r2.review = true;
-//
-//        ArrayList<Reviewer> arr = new ArrayList<>();
-//        arr.add(r2);
-//        System.out.println(Util.R_R(arr, r1, 1.0, S));
+
+        String advicestring;
+        if(overallmax != 0.0 && suggestedchoice != null){
+            advicestring = suggestedchoice.decisionstate;
+        }else{
+            advicestring = "Don't consult reviewers, reject book";
+        }
+
+        System.out.println("Expected value: " + overallmax);
+        System.out.println(advicestring + ": ");
+
 
     }
 
 
+    //        Expected value: 8540
+    //        Consult reviewer 2: Yes.
+    //        Publish
+    
 
     public static double maxExpectedValue(Node root){
 
@@ -57,15 +71,15 @@ public class Main {
             if(!root.reviewers_used.isEmpty()){
                 success_probability = Util.S_R(root.reviewers_used, root.probability, S, 'S');
             }
-            System.out.println(success_probability);
+//            System.out.println(success_probability);
 
             //compute expected value
             double expectedval =  Util.expectedVal(success_probability, success_amount, (1-success_probability), failure_amount, root.reviewers_used);
-            System.out.println(expectedval + "\n");
+//            System.out.println(expectedval + "\n");
             return expectedval;
         }
         else if(root.children.isEmpty() && root.type.equals("reject")){
-            System.out.println("reject cost:" + Util.rejectCost(root.reviewers_used) + "\n");
+//            System.out.println("reject cost:" + Util.rejectCost(root.reviewers_used) + "\n");
             return Util.rejectCost(root.reviewers_used);
         }
 
@@ -120,7 +134,7 @@ public class Main {
         for(int i=0; i<reviewersleft.size(); i++){
 
             //create a decision node for the reviewer
-            Node decision = new Node("decision R" + reviewersleft.get(i).id, "decision", 1.0);
+            Node decision = new Node("Consult Reviewer " + reviewersleft.get(i).id, "decision", 1.0);
 
             ArrayList<Reviewer> newreviewersleft = copyReviewers(reviewersleft);
             newreviewersleft.remove(i);
@@ -175,7 +189,7 @@ public class Main {
             new_reviewersleft.remove(i);
 
             //create a decision node for this reviewer
-            Node decision = new Node("decision R" + reviewersleft.get(i).id, "decision", current.probability, copyReviewers(current.reviewers_used));
+            Node decision = new Node("Consult Reviewer " + reviewersleft.get(i).id, "decision", current.probability, copyReviewers(current.reviewers_used));
 
             //add a R=T node
             ArrayList<Reviewer> reviewers1 = copyReviewers(current.reviewers_used);
