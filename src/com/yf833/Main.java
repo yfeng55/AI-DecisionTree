@@ -103,6 +103,9 @@ public class Main {
         //for each reviewer left in the set of reviewers, build a subtree
         for(int i=0; i<reviewersleft.size(); i++){
 
+            //create a decision node for the reviewer
+            Node decision = new Node("decision R" + reviewersleft.get(i).id, "decision", 1.0);
+
             ArrayList<Reviewer> newreviewersleft = copyReviewers(reviewersleft);
             newreviewersleft.remove(i);
 
@@ -111,14 +114,16 @@ public class Main {
             newnode1.reviewers_used.add(new Reviewer(reviewersleft.get(i), true) );
 
             Node yeschild = buildSubtree(newreviewersleft, newnode1, reviewersleft.get(i).Rt);
-            root.children.add(yeschild);
+            decision.children.add(yeschild);
 
             //create a new decision node for each reviewer
             Node newnode2 = new Node("Consult R" + reviewersleft.get(i).id + ": False", "consult", reviewersleft.get(i).Rf);
             newnode2.reviewers_used.add(new Reviewer(reviewersleft.get(i), false) );
 
             Node nochild = buildSubtree(newreviewersleft, newnode2, reviewersleft.get(i).Rt);
-            root.children.add(nochild);
+            decision.children.add(nochild);
+
+            root.children.add(decision);
         }
 
         return root;
@@ -153,18 +158,23 @@ public class Main {
             ArrayList<Reviewer> new_reviewersleft = copyReviewers(reviewersleft);
             new_reviewersleft.remove(i);
 
+            //create a decision node for this reviewer
+            Node decision = new Node("decision R" + reviewersleft.get(i).id, "decision", current.probability, copyReviewers(current.reviewers_used));
+
             //add a R=T node
             ArrayList<Reviewer> reviewers1 = copyReviewers(current.reviewers_used);
             reviewers1.add(new Reviewer(reviewersleft.get(i), true));
             Node child1 = buildSubtree(new_reviewersleft, new Node("Consult R" + reviewersleft.get(i).id + ": True", "consult", r_probability, reviewers1), r_probability);
-            current.children.add(child1);
+            decision.children.add(child1);
 
             //add a R=F node
             ArrayList<Reviewer> reviewers2 = new ArrayList<>(current.reviewers_used);
             reviewers2.add(new Reviewer(reviewersleft.get(i), false));
             Node child2 = buildSubtree(new_reviewersleft, new Node("Consult R" + reviewersleft.get(i).id + ": False", "consult", 1-r_probability, reviewers2), 1-r_probability);
-            current.children.add(child2);
+            decision.children.add(child2);
 
+
+            current.children.add(decision);
 
 
             if(current.reviewers_used.get(current.reviewers_used.size()-1).review == false){
