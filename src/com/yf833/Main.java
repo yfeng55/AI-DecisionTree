@@ -3,7 +3,6 @@ package com.yf833;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 
 
@@ -44,23 +43,23 @@ public class Main {
     public static Node buildTree(){
 
         //build root node:
-        Node root = new Node("root", "root", true);
-        root.children.add(new Node("reject", "reject", true));
-        root.children.add(new Node("publish", "publish", true));
+        Node root = new Node("root", "root", 1.0);
+        root.children.add(new Node("reject", "reject", 1.0));
+        root.children.add(new Node("publish", "publish", 1.0));
 
         //create a set of reviewers
-        HashSet<Reviewer> reviewer_set = new HashSet<>();
+        ArrayList<Reviewer> reviewer_list = new ArrayList<>();
         for(Reviewer r : reviewers){
-            reviewer_set.add(r);
+            reviewer_list.add(r);
         }
 
         //for each reviewer left in the set of reviewers, build a subtree
-        for(Reviewer r : reviewer_set){
+        for(Reviewer r : reviewer_list){
 
-            HashSet<Reviewer> new_reviewerset = new HashSet<>(reviewer_set);
-            new_reviewerset.remove(r);
+            ArrayList<Reviewer> new_reviewerlist = copyReviewers(reviewer_list);
+            new_reviewerlist.remove(r);
 
-            Node child = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", true));
+            Node child = buildSubtree(new_reviewerlist, new Node("Consult R" + r.id, "consult", 1.0));
             root.children.add(child);
         }
 
@@ -68,14 +67,14 @@ public class Main {
     }
 
 
-    public static Node buildSubtree(HashSet<Reviewer> reviewer_set, Node current){
+    public static Node buildSubtree(ArrayList<Reviewer> reviewer_list, Node current){
 
         //base cases:
 
         //if no more nodes to add
-        if(reviewer_set.isEmpty()){
-            current.children.add(new Node("publish", "publish", true));
-            current.children.add(new Node("reject", "reject", true));
+        if(reviewer_list.isEmpty()){
+            current.children.add(new Node("publish", "publish", 1.0));
+            current.children.add(new Node("reject", "reject", 1.0));
             return current;
         }
         //if node is an end node (publish or reject)
@@ -85,24 +84,23 @@ public class Main {
 
 
         //recursive case:
-        for(Reviewer r : reviewer_set){
+        for(Reviewer r : reviewer_list){
 
             //create a new reviewerset where the current reviewer is removed
-            HashSet<Reviewer> new_reviewerset = new HashSet<>(reviewer_set);
-            new_reviewerset.remove(r);
+            ArrayList<Reviewer> new_reviewerlist = copyReviewers(reviewer_list);
+            new_reviewerlist.remove(r);
 
-
-            ArrayList<Reviewer> reviewers1 = new ArrayList<>(current.reviewers_used);
-            reviewers1.add(r);
-            Node child1 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", true, r.Rt, reviewers1) );
+            ArrayList<Reviewer> reviewers1 = copyReviewers(current.reviewers_used);
+            reviewers1.add(new Reviewer(r, true));
+            Node child1 = buildSubtree(new_reviewerlist, new Node("Consult R" + r.id, "consult", r.Rt, reviewers1) );
             current.children.add(child1);
-            current.children.add(new Node("publish", "publish", true));
+            current.children.add(new Node("publish", "publish", 1.0));
 
             ArrayList<Reviewer> reviewers2 = new ArrayList<>(current.reviewers_used);
-            reviewers2.add(r);
-            Node child2 = buildSubtree(new_reviewerset, new Node("Consult R" + r.id, "consult", false, r.Rf, reviewers2) );
+            reviewers2.add(new Reviewer(r, false));
+            Node child2 = buildSubtree(new_reviewerlist, new Node("Consult R" + r.id, "consult", r.Rf, reviewers2) );
             current.children.add(child2);
-            current.children.add(new Node("reject", "reject", true));
+            current.children.add(new Node("reject", "reject", 1.0));
         }
 
         return current;
