@@ -8,6 +8,11 @@ public class Util {
     // return the conditional probability that the book will succeed: P(S|R1,..Rn)
     public static double S_R(ArrayList<Reviewer> reviewers, double R_Rprev, double S, char sf){
 
+        if(reviewers.size() <= 1){
+            R_Rprev = 1.0;
+        }
+
+
         double numerator=1;
         double denominator=1;
 
@@ -18,7 +23,7 @@ public class Util {
                 if(r.review == true){
                     numerator *= r.Rt_St;
                 }else{
-                    numerator *= 1 - r.Rt_St;
+                    numerator *= (1 - r.Rt_St);
                 }
             }
         }
@@ -28,7 +33,7 @@ public class Util {
                 if(r.review == true){
                     numerator *= r.Rt_Sf;
                 }else{
-                    numerator *= 1 - r.Rt_Sf;
+                    numerator *= (1 - r.Rt_Sf);
                 }
             }
         }

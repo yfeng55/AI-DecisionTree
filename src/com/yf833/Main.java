@@ -48,7 +48,7 @@ public class Main {
 
         //base case (success/fail node):
         if(root.children.isEmpty() && root.type.equals("publish")){
-            double success_probability = 0.0;
+            double success_probability = S;
             if(!root.reviewers_used.isEmpty()){
                 success_probability = Util.S_R(root.reviewers_used, root.probability, S, 'S');
             }
@@ -118,7 +118,7 @@ public class Main {
         //base cases:
         //if no more nodes to add
         if(reviewersleft.isEmpty() && current.reviewers_used.get(current.reviewers_used.size()-1).review == false){
-            current.children.add(new Node("reject", "reject", 1-current.probability, copyReviewers(current.reviewers_used)));
+            current.children.add(new Node("reject", "reject", 1.0-current.probability, copyReviewers(current.reviewers_used)));
             return current;
         }
         else if(reviewersleft.isEmpty() && current.reviewers_used.get(current.reviewers_used.size()-1).review == true){
