@@ -71,14 +71,30 @@ public class Main {
 
 
         ArrayList<Double> expectedvals = new ArrayList<>();
-        ArrayList<String> types = new ArrayList<>();
 
         for(Node n : root.children){
 
             if(n.visited.equals("unseen")){
                 double expectedval = maxExpectedValue(n);
+                expectedvals.add(expectedval);
             }
         }
+
+
+        if(root.children.size() > 1){
+            //case1: two consult nodes - return weighted avg
+            if(root.children.get(0).type.equals("consult") || root.children.get(1).type.equals("consult")){
+                returnval = root.children.get(0).probability * expectedvals.get(0) + root.children.get(1).probability * expectedvals.get(1);
+            }
+            //case2: decision node and publish node - return max value
+            //case3: decision node and reject node - return max value
+            else if(root.children.get(0).type.equals("decision") || root.children.get(1).type.equals("decision")){
+                returnval = Math.max(expectedvals.get(0), expectedvals.get(1));
+            }
+        }else{
+            return expectedvals.get(0);
+        }
+
 
 
         root.visited = "finished";
