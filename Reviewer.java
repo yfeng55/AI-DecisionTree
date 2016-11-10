@@ -1,6 +1,3 @@
-package com.yf833;
-
-
 public class Reviewer {
 
     public int id;

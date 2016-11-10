@@ -1,5 +1,3 @@
-package com.yf833;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -57,7 +55,7 @@ public class Main {
     //        Expected value: 8540
     //        Consult reviewer 2: Yes.
     //        Publish
-    
+
 
     public static double maxExpectedValue(Node root){
 
