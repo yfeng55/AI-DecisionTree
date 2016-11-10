@@ -154,6 +154,15 @@ public class Main {
 
     }
 
+    //copy a list of reviewers
+    public static ArrayList<Reviewer> copyReviewers(ArrayList<Reviewer> reviewers){
+        ArrayList<Reviewer> copy = new ArrayList<>(reviewers.size());
+        for (Reviewer r : reviewers) {
+            copy.add(new Reviewer(r));
+        }
+        return copy;
+    }
+
 
 }
 

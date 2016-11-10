@@ -14,10 +14,11 @@ public class Node {
 
 
 
-    public Node(String decisionstate, String type, boolean prev_recommendation){
+    public Node(String decisionstate, String type, boolean prev_recommendation, double probability){
         this.decisionstate = decisionstate;
         this.type = type;
         this.prev_recommendation = prev_recommendation;
+        this.probability = probability;
 
         this.children = new ArrayList<>();
         this.reviewers_used = new ArrayList<>();
@@ -32,6 +33,8 @@ public class Node {
         this.children = new ArrayList<>();
         this.reviewers_used = reviewers_used;
     }
+
+
 
 
     public String toString(){

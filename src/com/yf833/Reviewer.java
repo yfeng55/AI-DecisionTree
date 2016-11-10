@@ -22,6 +22,18 @@ public class Reviewer {
         this.Rf = 1.0 - Rt;
     }
 
+    //copy constructor
+    public Reviewer(Reviewer oldreviewer){
+        this.id = oldreviewer.id;
+        this.cost = oldreviewer.cost;
+        this.Rt_St = oldreviewer.Rt_St;
+        this.Rt_Sf = oldreviewer.Rt_Sf;
+
+        this.Rt = oldreviewer.Rt;
+        this.Rf = oldreviewer.Rf;
+    }
+
+
 
     public String toString(){
         String output = "";
